@@ -5,8 +5,8 @@
 # a new akmod package will only get build when a new one is actually needed
 %global buildforkernels current
 
-%global commitdate 20160726
-%global commit 48f9854e5d18ec360f36d9242a575ad072dedab9
+%global commitdate 20161214
+%global commit 0712f3944375108fd64fac706aae32063940c8e2
 %global shortcommit %(c=%{commit}; echo ${c:0:7})
 
 %global srcname bcwc_pcie
@@ -30,7 +30,7 @@ ExclusiveArch:  i686 x86_64
 %{!?kernels:BuildRequires: buildsys-build-rpmfusion-kerneldevpkgs-%{?buildforkernels:%{buildforkernels}}%{!?buildforkernels:current}-%{_target_cpu} }
 
 # kmodtool does its magic here
-%{expand:%(kmodtool --target %{_target_cpu} --repo rpmfusion --kmodname %{kmodname} %{?buildforkernels:--%{buildforkernels}} %{?kernels:--for-kernels "%{?kernels}"} 2>/dev/null) }
+%{expand:%(kmodtool --target %{_target_cpu} --repo rpmfusion --kmodname %{kmodname} %{?buildforkernels:--%{buildforkernels}} %{?kernels:--for-kernels "%{?kernels}"} 2>/dev/null | grep -v kmod-common) }
 
 %description
 Linux driver for the Facetime HD (Broadcom 1570) PCIe webcam found in recent
@@ -41,7 +41,7 @@ Macbooks.
 %{?kmodtool_check}
 
 # print kmodtool output for debugging purposes:
-kmodtool --target %{_target_cpu}  --repo rpmfusion --kmodname %{kmodname} %{?buildforkernels:--%{buildforkernels}} %{?kernels:--for-kernels "%{?kernels}"} 2>/dev/null
+kmodtool --target %{_target_cpu}  --repo rpmfusion --kmodname %{kmodname} %{?buildforkernels:--%{buildforkernels}} %{?kernels:--for-kernels "%{?kernels}"} 2>/dev/null | grep -v kmod-common
 
 %setup -q -c -T -a 0
 
