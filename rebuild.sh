@@ -27,7 +27,7 @@ mock -r $MOCKCFG install \
   kernel-${KERNEL}.rpm
 
 pkgs=(facetimehd-kmod-0-1.20161214git0712f39.fc25.src.rpm)
-#pkgs+=(../wl-kmod/wl-kmod-6.30.223.271-7.fc23.src.rpm)
+#pkgs+=(../wl-kmod/wl-kmod-6.30.223.271-8.fc25.src.rpm)
 for pkg in ${pkgs[@]}; do
   mock -r $MOCKCFG --no-clean rebuild \
     ../${pkg} --define "kernels $KERNEL"
