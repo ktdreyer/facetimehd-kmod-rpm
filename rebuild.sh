@@ -4,7 +4,7 @@ set -ex
 # Rebuild kmod packages for a new kernel.
 
 # Set whatever kernel you want here:
-KERNEL=4.8.15-300.fc25.x86_64
+KERNEL=4.9.10-200.fc25.x86_64
 
 # From mock-rpmfusion-free package:
 MOCKCFG=fedora-25-x86_64-rpmfusion_free
