@@ -12,19 +12,19 @@ MOCKCFG=fedora-25-x86_64-rpmfusion_free
 mkdir -p $KERNEL
 cd $KERNEL
 
-YUMDOWNLOADER="yumdownloader --disablerepo=rhpkg --disablerepo=ktdreyer"
-[ -f kernel-${KERNEL}.rpm ] || $YUMDOWNLOADER kernel
-[ -f kernel-core-${KERNEL}.rpm ] || $YUMDOWNLOADER kernel-core
-[ -f kernel-devel-${KERNEL}.rpm ] || $YUMDOWNLOADER kernel-devel
-[ -f kernel-modules-${KERNEL}.rpm ] || $YUMDOWNLOADER kernel-modules
+DNFDOWNLOAD="dnf download --disablerepo=rhpkg --disablerepo=ktdreyer --enablerepo=updates-testing"
+[ -f kernel-${KERNEL}.rpm ] || $DNFDOWNLOAD kernel-${KERNEL}
+[ -f kernel-core-${KERNEL}.rpm ] || $DNFDOWNLOAD kernel-core-${KERNEL}
+[ -f kernel-devel-${KERNEL}.rpm ] || $DNFDOWNLOAD kernel-devel-${KERNEL}
+[ -f kernel-modules-${KERNEL}.rpm ] || $DNFDOWNLOAD kernel-modules-${KERNEL}
 
 mock -r $MOCKCFG init
 
 mock -r $MOCKCFG install \
-  kernel-core-${KERNEL} \
-  kernel-devel-${KERNEL} \
-  kernel-modules-${KERNEL} \
-  kernel-${KERNEL}
+  kernel-core-${KERNEL}.rpm \
+  kernel-devel-${KERNEL}.rpm \
+  kernel-modules-${KERNEL}.rpm \
+  kernel-${KERNEL}.rpm
 
 pkgs=(facetimehd-kmod-0-1.20161214git0712f39.fc25.src.rpm)
 #pkgs+=(../wl-kmod/wl-kmod-6.30.223.271-7.fc23.src.rpm)
