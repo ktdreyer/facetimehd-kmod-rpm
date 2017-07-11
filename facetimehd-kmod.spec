@@ -64,6 +64,8 @@ for kernel_version in %{?kernel_versions}; do
  popd
 done
 
+# TODO: also /etc/modules-load.d/facetimehd.conf
+
 chmod 0755 $RPM_BUILD_ROOT%{kmodinstdir_prefix}*%{kmodinstdir_postfix}/* || :
 %{?akmod_install}
 
