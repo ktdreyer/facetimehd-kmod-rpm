@@ -4,7 +4,7 @@ set -ex
 # Rebuild kmod packages for a new kernel.
 
 # Set whatever kernel you want here:
-KERNEL=4.9.10-200.fc25.x86_64
+KERNEL=4.11.9-200.fc25.x86_64
 
 # From mock-rpmfusion-free package:
 MOCKCFG=fedora-25-x86_64-rpmfusion_free
@@ -27,7 +27,7 @@ mock -r $MOCKCFG install \
   kernel-${KERNEL}.rpm
 
 pkgs=(facetimehd-kmod-0-1.20161214git0712f39.fc25.src.rpm)
-#pkgs+=(../wl-kmod/wl-kmod-6.30.223.271-8.fc25.src.rpm)
+pkgs+=(../wl-kmod/wl-kmod-6.30.223.271-13.fc27.src.rpm)
 for pkg in ${pkgs[@]}; do
   mock -r $MOCKCFG --no-clean rebuild \
     ../${pkg} --define "kernels $KERNEL"
