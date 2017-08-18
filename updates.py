@@ -34,7 +34,7 @@ def get_fedora_releases(client):
 
 def get_latest_kernel(client, release):
     """
-    Get the NVR of the latest testing or stable kernel for a Fedora release.s
+    Get the NVR of the latest testing or stable kernel for a Fedora release.
     """
     kwargs = {
         'packages': ['kernel'],
