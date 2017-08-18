@@ -50,6 +50,9 @@ def get_latest_kernel(client, release):
 
 
 def kernel_filenames(nvr):
+    """
+    Return a set of .rpm filenames we will need in order to build a kmod pkg.
+    """
     vr = nvr[7:]
     filenames = set([
         'kernel-%s.x86_64.rpm',
