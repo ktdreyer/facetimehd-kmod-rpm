@@ -3,6 +3,7 @@
 import errno
 from glob import glob
 import os
+import re
 import shutil
 import subprocess
 from bodhi.client.bindings import BodhiClient
@@ -83,14 +84,48 @@ def download_kernel(nvr):
             subprocess.check_call(cmd, cwd=vr)
 
 
+def rpm_name(srpm, vr):
+    """
+    Return the .rpm file name,
+    :param srpm: an SRPM file name
+    :param   vr: a kernel version-release.
+    """
+    pkg = os.path.basename(srpm)
+    (name, kmod, rest) = pkg.split('-', 2)
+    m = re.search('fc\d\d$', vr)
+    distarch = m.group(0)
+    rest = re.sub('fc\d\d\.src\.rpm', distarch, rest)
+    return 'kmod-{name}-{vr}.x86_64-{rest}.x86_64.rpm'.format(name=name,
+                                                              vr=vr,
+                                                              rest=rest)
+
+
 def mock_build(release, nvr):
-    """ mockbuild all our packages for this Fedora release and kernel nvr. """
+    """
+    mockbuild all our packages for this Fedora release and kernel nvr.
+
+    Skips SRPMs that are already built for this kernel nvr.
+
+    :returns: list of all built packages (SRPMs). If we skipped all SRPMs,
+              this list will be empty.
+    """
     vr = nvr[7:]
 
-    # TODO: make this skip building entirely if we already have the relevant
-    # kmod binary RPMs in our "vr" directory. Otherwise it's just churn every
-    # time we run this. We'll need to make that glob wildcard more precise, to
-    # check for the exact kmod RPM NVRs we expect.
+    packages = ['facetimehd-kmod-0-1.20161214git0712f39.fc25.src.rpm']
+    packages += ['../wl-kmod/wl-kmod-6.30.223.271-13.fc27.src.rpm']
+
+    # Only rebuild packages that we have not yet built.
+    to_build = []
+    for srpm in packages:
+        rpm = rpm_name(srpm, vr)
+        filename = os.path.join(vr, rpm)
+        if os.path.exists(filename):
+            # print(' RPM %s already exists' % filename)
+            continue
+        to_build.append(srpm)
+
+    if not to_build:
+        return []
 
     # Initialize a clean mock chroot
     mockcfg = 'fedora-%s-x86_64-rpmfusion_free' % release
@@ -111,19 +146,22 @@ def mock_build(release, nvr):
     subprocess.check_call(cmd, cwd=vr)
 
     # Rebuild our packages
-    packages = ['facetimehd-kmod-0-1.20161214git0712f39.fc25.src.rpm']
-    packages += ['../wl-kmod/wl-kmod-6.30.223.271-13.fc27.src.rpm']
-    for pkg in packages:
+    built = []
+    for srpm in to_build:
         cmd = ('mock', '-r', mockcfg,
                '--no-clean',
-               'rebuild', pkg,
+               'rebuild', srpm,
                '--define=kernels %s.x86_64' % vr)
         print(' '.join(cmd))
         subprocess.check_call(cmd)
-    output = '/var/lib/mock/fedora-%s-x86_64/result/kmod-*.x86_64.rpm'
-    for filename in glob(output % release):
-        print('saving %s' % os.path.basename(filename))
-        shutil.copy(filename, vr)
+        rpm = rpm_name(srpm, vr)
+        output = os.path.join('/var/lib/mock',
+                              'fedora-%s-x86_64' % release,
+                              'result', rpm)
+        built.append(rpm)
+        print('saving %s' % output)
+        shutil.copy(output, vr)
+    return built
 
 
 def generate_repo(release, nvr):
@@ -161,6 +199,9 @@ for release in releases:
     kernel = get_latest_kernel(client, release)
     print('f%s: %s' % (release, kernel))
     download_kernel(kernel)
-    mock_build(release, kernel)
+    builds = mock_build(release, kernel)
+    if not builds:
+        print('skipped all builds for %s' % kernel)
+        continue
     generate_repo(release, kernel)
     publish_repo(release)
