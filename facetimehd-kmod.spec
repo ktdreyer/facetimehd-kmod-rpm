@@ -22,6 +22,9 @@ URL:        https://github.com/patjak/bcwc_pcie
 Source0:    https://github.com/patjak/%{srcname}/archive/%{commit}/%{srcname}-%{version}-%{shortcommit}.tar.gz
 
 BuildRequires:  %{_bindir}/kmodtool
+# kernel bug? # "Cannot generate ORC metadata for CONFIG_UNWINDER_ORC=y"
+# see https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=886474
+BuildRequires:  elfutils-libelf-devel
 
 # needed for plague to make sure it builds for i586 and i686
 ExclusiveArch:  i686 x86_64
