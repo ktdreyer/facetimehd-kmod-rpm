@@ -2,7 +2,7 @@ Binary RPMs at https://ktdreyer.fedorapeople.org/macbook/
 
 To refresh the DNF cache for this repo's data:
 
- dnf --disablerepo='*' --enablerepo=ktdreyer-macbook --refresh
+ dnf --disablerepo='*' --enablerepo=ktdreyer-macbook makecache --refresh
 
 To install the kmods for your running kernel:
 
