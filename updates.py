@@ -112,7 +112,7 @@ def mock_build(release, nvr):
     vr = nvr[7:]
 
     packages = ['facetimehd-kmod-0-1.20161214git0712f39.fc28.src.rpm']
-    packages += ['../wl-kmod/wl-kmod-6.30.223.271-13.fc27.src.rpm']
+    packages += ['../wl-kmod/wl-kmod-6.30.223.271-16.fc28.src.rpm']
 
     # Only rebuild packages that we have not yet built.
     to_build = []
