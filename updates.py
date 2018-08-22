@@ -19,8 +19,6 @@ def get_fedora_releases(client):
 
     For example: set(["25", "26"])
 
-    TODO: get from PDC instead, see https://pagure.io/fedpkg/pull-request/188
-
     :param client:  BodhiClient
     """
     # return set(['26'])  # XXX debugging!
