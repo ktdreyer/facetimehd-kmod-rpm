@@ -21,7 +21,7 @@ def get_fedora_releases(client):
 
     :param client:  BodhiClient
     """
-    # return set(['26'])  # XXX debugging!
+    # return set(['28'])  # XXX debugging!
     allreleases = client.get_releases().releases
     releases = set()
     for release in allreleases:
