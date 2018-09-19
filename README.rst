@@ -26,12 +26,12 @@ I use a script ("``updates.py``") to build for the latest kernel in Fedora's
 `updates-testing repository
 <https://bodhi.fedoraproject.org/updates/?packages=kernel>`_.
 
-To install the very latest kernel from Fedora's updates-testing repository, run
-this command as root::
+To install the very latest kernel from Fedora's updates-testing repository on
+to your computer, run this command as root::
 
    dnf -y update --enablerepo=\*-testing
 
-(... and if there is a newer kernel available, DNF will install it.)
+(... and if there is a newer Fedora kernel available, DNF will install it.)
 
 Refreshing the cache
 ====================
