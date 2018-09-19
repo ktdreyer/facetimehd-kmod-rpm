@@ -78,10 +78,14 @@ def download_kernel(nvr):
         if e.errno != errno.EEXIST:
             raise
     for filename in kernel_filenames(nvr):
-        cmd = ('koji', 'download-build', '-a', 'x86_64', '--rpm', filename)
+        cmd = ('koji', 'download-build', '-a', 'x86_64', '--key', '9db62fb1',
+               '--rpm', filename)
         if not os.path.exists(os.path.join(vr, filename)):
             print(' '.join(cmd))
             subprocess.check_call(cmd, cwd=vr)
+        # Verify that the package matches its checksums.
+        # todo: verify gpg signature as well
+        subprocess.check_call(('rpm', '-K', '--nosignature', filename), cwd=vr)
 
 
 def rpm_name(srpm, vr):
