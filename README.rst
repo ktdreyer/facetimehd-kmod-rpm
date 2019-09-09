@@ -1,3 +1,8 @@
+**WARNING: As of 2019, I do not have a MacBook Pro anymore. I've abandoned
+this code, and I no longer update my Yum repositories on fedorapeople.org.**
+(If you're looking for a Linux-friendly laptop, I'm really happy with my new
+Levono X1 Carbon.) 
+
 This is the RPM packaging for the 3rd-party `facetimehd kernel module for
 MacBook Pros <https://github.com/patjak/bcwc_pcie/>`_.
 
